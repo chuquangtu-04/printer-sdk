@@ -1,0 +1,26 @@
+{
+  "name": "@nemo/printer-sdk",
+  "version": "1.0.0",
+  "description": "TypeScript SDK for NemoPOS Printer Service",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "nemo",
+    "printer",
+    "pos",
+    "escpos"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}
