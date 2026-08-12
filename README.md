@@ -1,4 +1,4 @@
-# @nemo/printer-sdk
+# @nemoprint/printer-sdk
 
 SDK TypeScript dùng để gọi **NemoPOS Printer Service** đang chạy trên máy local.
 
@@ -8,10 +8,12 @@ SDK này không thay thế ứng dụng desktop/service in. Trước khi gọi A
 http://localhost:9000
 ```
 
-## Cài đặt
+## Cài Đặt
+
+Sau khi package đã được publish lên npm:
 
 ```bash
-npm install @nemo/printer-sdk
+npm install @nemoprint/printer-sdk
 ```
 
 Nếu đang phát triển trực tiếp trong repo này:
@@ -28,10 +30,45 @@ npm.cmd install
 npm.cmd run build
 ```
 
-## Khởi tạo SDK
+## Publish Lên Npm
+
+Package hiện dùng scope npm:
+
+```text
+@nemoprint/printer-sdk
+```
+
+Trước khi publish, đăng nhập npm:
+
+```bash
+npm login
+npm whoami
+```
+
+Build và publish:
+
+```bash
+npm run build
+npm publish --access public
+```
+
+Trên Windows có thể dùng:
+
+```powershell
+npm.cmd run build
+npm.cmd publish --access public
+```
+
+Sau khi publish thành công, dự án khác có thể cài bằng:
+
+```bash
+npm install @nemoprint/printer-sdk
+```
+
+## Khởi Tạo SDK
 
 ```ts
-import { PrinterSDK } from '@nemo/printer-sdk';
+import { PrinterSDK } from '@nemoprint/printer-sdk';
 
 const printer = new PrinterSDK();
 ```
@@ -52,10 +89,10 @@ const printer = new PrinterSDK({
 });
 ```
 
-## Ví dụ sử dụng nhanh
+## Ví Dụ Sử Dụng Nhanh
 
 ```ts
-import { PrinterSDK } from '@nemo/printer-sdk';
+import { PrinterSDK } from '@nemoprint/printer-sdk';
 
 const printer = new PrinterSDK();
 
@@ -77,7 +114,7 @@ await printer.printKitchen(printerId, {
 });
 ```
 
-## Danh sách API
+## Danh Sách API
 
 ### `health()`
 
@@ -94,16 +131,6 @@ Kết quả:
   success: boolean;
   version: string;
   status: string;
-}
-```
-
-Ví dụ:
-
-```ts
-const health = await printer.health();
-
-if (health.success && health.status === 'running') {
-  console.log('Printer Service dang chay');
 }
 ```
 
@@ -127,21 +154,13 @@ Array<{
 }>
 ```
 
-Ví dụ:
-
-```ts
-const printers = await printer.getPrinters();
-const onlinePrinters = printers.filter((item) => item.status === 'online');
-
-console.log(onlinePrinters);
-```
-
 ### `testPrint(printerId)`
 
 In thử trên một máy in cụ thể.
 
 ```ts
-await printer.testPrint(printerId);
+const printers = await printer.getPrinters();
+await printer.testPrint(printers[0].id);
 ```
 
 Tham số:
@@ -149,13 +168,6 @@ Tham số:
 | Tên | Kiểu | Bắt buộc | Mô tả |
 | --- | --- | --- | --- |
 | `printerId` | `string` | Có | ID máy in lấy từ `getPrinters()` |
-
-Ví dụ:
-
-```ts
-const printers = await printer.getPrinters();
-await printer.testPrint(printers[0].id);
-```
 
 ### `print(payload)`
 
@@ -347,15 +359,8 @@ Array<{
 
 Chạy lại job in bị lỗi.
 
-Chạy lại toàn bộ job có thể retry:
-
 ```ts
 await printer.retryQueue();
-```
-
-Chạy lại một job cụ thể:
-
-```ts
 await printer.retryQueue({ id: 5 });
 ```
 
@@ -384,7 +389,7 @@ Kết quả:
 }
 ```
 
-## Kết quả khi in thành công
+## Kết Quả Khi In Thành Công
 
 Các API in như `print`, `printReceipt`, `printKitchen`, `printBill`, `printLabel` trả về:
 
@@ -409,12 +414,12 @@ Các API in như `print`, `printReceipt`, `printKitchen`, `printBill`, `printLab
 }
 ```
 
-## Xử lý lỗi
+## Xử Lý Lỗi
 
 SDK sẽ throw `PrinterSDKError` nếu service trả lỗi HTTP hoặc không xử lý được request.
 
 ```ts
-import { PrinterSDK, PrinterSDKError } from '@nemo/printer-sdk';
+import { PrinterSDK, PrinterSDKError } from '@nemoprint/printer-sdk';
 
 const printer = new PrinterSDK();
 
@@ -440,7 +445,7 @@ Các lỗi thường gặp:
 | Sai `printerId` | Lấy lại ID mới nhất từ `getPrinters()` |
 | Job in lỗi | Gọi `getQueue()`, xem `lastError`, sau đó dùng `retryQueue()` |
 
-## Thứ tự gọi API đề xuất
+## Thứ Tự Gọi API Đề Xuất
 
 ```ts
 const printer = new PrinterSDK();
@@ -457,18 +462,4 @@ await printer.printKitchen(selectedPrinter.id, {
   table: '208',
   items: [{ name: 'Pho bo', qty: 1 }],
 });
-```
-
-## Build
-
-```bash
-npm install
-npm run build
-```
-
-## Publish
-
-```bash
-npm login
-npm publish --access public
 ```
