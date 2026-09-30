@@ -1,15 +1,23 @@
 import {
   BillData,
   ClearQueueResponse,
+  FailedPrintJob,
   HealthStatus,
+  InvoicePrintPayload,
   KitchenData,
+  LanPrinterActionResponse,
+  LanPrinterDiscoveryOptions,
+  LanPrinterDiscoveryResponse,
   LabelData,
   PrintPayload,
   PrintResponse,
   PrinterInfo,
   PrinterSDKOptions,
   ReceiptData,
+  RenameLanPrinterPayload,
   RetryQueuePayload,
+  SaveLanPrinterPayload,
+  TestLanPrinterPayload,
   TestPrintResponse,
   PrintJob,
 } from './types';
@@ -43,6 +51,39 @@ export class PrinterSDK {
     return this.request<PrinterInfo[]>('/api/printers');
   }
 
+  discoverLanPrinters(options: LanPrinterDiscoveryOptions = {}): Promise<LanPrinterDiscoveryResponse> {
+    return this.request<LanPrinterDiscoveryResponse>('/api/printers/lan/discover', {
+      query: { ...options },
+    });
+  }
+
+  testLanPrinter(payload: TestLanPrinterPayload): Promise<TestPrintResponse> {
+    return this.request<TestPrintResponse>('/api/printers/lan/test', {
+      method: 'POST',
+      body: payload,
+    });
+  }
+
+  saveLanPrinter(payload: SaveLanPrinterPayload): Promise<LanPrinterActionResponse> {
+    return this.request<LanPrinterActionResponse>('/api/printers/lan/save', {
+      method: 'POST',
+      body: payload,
+    });
+  }
+
+  renameLanPrinter(id: string, payload: RenameLanPrinterPayload | string): Promise<LanPrinterActionResponse> {
+    return this.request<LanPrinterActionResponse>(`/api/printers/lan/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: typeof payload === 'string' ? { name: payload } : payload,
+    });
+  }
+
+  deleteLanPrinter(id: string): Promise<LanPrinterActionResponse> {
+    return this.request<LanPrinterActionResponse>(`/api/printers/lan/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+  }
+
   testPrint(printerId: string): Promise<TestPrintResponse> {
     return this.request<TestPrintResponse>('/api/printers/test', {
       method: 'POST',
@@ -55,6 +96,10 @@ export class PrinterSDK {
       method: 'POST',
       body: payload,
     });
+  }
+
+  printInvoice(payload: InvoicePrintPayload): Promise<PrintResponse> {
+    return this.print(payload);
   }
 
   printReceipt(printer: string, data: ReceiptData): Promise<PrintResponse> {
@@ -77,6 +122,10 @@ export class PrinterSDK {
     return this.request<PrintJob[]>('/api/queue');
   }
 
+  getFailedQueue(): Promise<FailedPrintJob[]> {
+    return this.request<FailedPrintJob[]>('/api/queue/failed');
+  }
+
   clearQueue(): Promise<ClearQueueResponse> {
     return this.request<ClearQueueResponse>('/api/queue', {
       method: 'DELETE',
@@ -92,13 +141,19 @@ export class PrinterSDK {
 
   private async request<TResponse>(
     path: string,
-    options: { method?: string; body?: unknown } = {}
+    options: { method?: string; body?: unknown; query?: Record<string, unknown> } = {}
   ): Promise<TResponse> {
-    const response = await this.fetchImpl(`${this.baseUrl}${path}`, {
-      method: options.method ?? 'GET',
-      headers: options.body === undefined ? undefined : { 'Content-Type': 'application/json' },
-      body: options.body === undefined ? undefined : JSON.stringify(options.body),
-    });
+    let response: Response;
+
+    try {
+      response = await this.fetchImpl(this.buildUrl(path, options.query), {
+        method: options.method ?? 'GET',
+        headers: options.body === undefined ? undefined : { 'Content-Type': 'application/json' },
+        body: options.body === undefined ? undefined : JSON.stringify(options.body),
+      });
+    } catch (error) {
+      throw new PrinterSDKError('Khong ket noi duoc Printer Service. Vui long mo lai ung dung in.', undefined, error);
+    }
 
     const data = await this.readResponse(response);
 
@@ -127,6 +182,19 @@ export class PrinterSDK {
     }
 
     return fallback || 'Printer service request failed';
+  }
+
+  private buildUrl(path: string, query?: Record<string, unknown>): string {
+    const params = new URLSearchParams();
+
+    for (const [key, value] of Object.entries(query ?? {})) {
+      if (value !== undefined && value !== null && value !== '') {
+        params.set(key, String(value));
+      }
+    }
+
+    const queryString = params.toString();
+    return queryString ? `${this.baseUrl}${path}?${queryString}` : `${this.baseUrl}${path}`;
   }
 
   private normalizeBaseUrl(baseUrl: string): string {
