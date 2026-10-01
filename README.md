@@ -1,34 +1,34 @@
 # @tpcoms/printer-sdk
 
-SDK TypeScript dÃ¹ng Ä‘á»ƒ gá»i **NemoPOS Printer Service** Ä‘ang cháº¡y trÃªn mÃ¡y local cá»§a ngÆ°á»i dÃ¹ng.
+TypeScript SDK de goi Printer Service dang chay tren may local cua nguoi dung.
 
-SDK nÃ y khÃ´ng thay tháº¿ á»©ng dá»¥ng desktop/service in. TrÆ°á»›c khi gá»i API, mÃ¡y ngÆ°á»i dÃ¹ng cáº§n cÃ i vÃ  má»Ÿ NemoPOS Printer Service. Máº·c Ä‘á»‹nh SDK gá»i service táº¡i:
+SDK nay khong thay the app desktop/service in. Truoc khi FE goi SDK, may nguoi dung can cai va mo Printer Service. Mac dinh SDK goi service tai:
 
 ```text
 http://localhost:9000
 ```
 
-## CÃ i Äáº·t
+## Cai Dat
 
 ```bash
 npm install @tpcoms/printer-sdk
 ```
 
-Náº¿u Ä‘ang phÃ¡t triá»ƒn trá»±c tiáº¿p trong repo SDK:
+Neu dang phat trien truc tiep trong repo SDK:
 
 ```bash
 npm install
 npm run build
 ```
 
-TrÃªn Windows, náº¿u PowerShell cháº·n `npm` vÃ¬ Execution Policy, dÃ¹ng:
+Tren Windows, neu PowerShell chan `npm` vi Execution Policy, dung:
 
 ```powershell
 npm.cmd install
 npm.cmd run build
 ```
 
-## Khá»Ÿi Táº¡o
+## Khoi Tao
 
 ```ts
 import { PrinterSDK } from '@tpcoms/printer-sdk';
@@ -36,7 +36,7 @@ import { PrinterSDK } from '@tpcoms/printer-sdk';
 const printer = new PrinterSDK();
 ```
 
-Náº¿u Printer Service cháº¡y á»Ÿ URL khÃ¡c:
+Neu Printer Service chay o URL khac:
 
 ```ts
 const printer = new PrinterSDK({
@@ -44,7 +44,7 @@ const printer = new PrinterSDK({
 });
 ```
 
-Náº¿u mÃ´i trÆ°á»ng cháº¡y khÃ´ng cÃ³ `fetch` global, truyá»n `fetchImpl`:
+Neu moi truong khong co `fetch` global, truyen `fetchImpl`:
 
 ```ts
 const printer = new PrinterSDK({
@@ -52,7 +52,7 @@ const printer = new PrinterSDK({
 });
 ```
 
-## Luá»“ng Sá»­ Dá»¥ng Nhanh
+## Luong Su Dung Nhanh
 
 ```ts
 import { PrinterSDK, PrinterSDKError } from '@tpcoms/printer-sdk';
@@ -71,10 +71,10 @@ try {
     language: 'vi',
     table: 'B05',
     orderId: 'ORD-001',
-    orderNote: 'KhÃ¡ch cáº§n gáº¥p',
+    orderNote: 'Khach can gap',
     items: [
-      { name: 'Phá»Ÿ bÃ²', qty: 2, note: 'KhÃ´ng hÃ nh' },
-      { name: 'TrÃ  Ä‘Ã¡', qty: 1 },
+      { name: 'Pho bo', qty: 2, note: 'Khong hanh' },
+      { name: 'Tra da', qty: 1 },
     ],
   });
 } catch (error) {
@@ -90,13 +90,13 @@ try {
 
 ### `health()`
 
-Kiá»ƒm tra Printer Service cÃ³ Ä‘ang cháº¡y khÃ´ng.
+Kiem tra Printer Service co dang chay khong.
 
 ```ts
 const health = await printer.health();
 ```
 
-Káº¿t quáº£:
+Ket qua:
 
 ```ts
 {
@@ -108,13 +108,13 @@ Káº¿t quáº£:
 
 ### `getPrinters()`
 
-Láº¥y danh sÃ¡ch mÃ¡y in service nháº­n diá»‡n Ä‘Æ°á»£c, gá»“m mÃ¡y in Windows/USB vÃ  LAN alias Ä‘Ã£ lÆ°u trong file cáº¥u hÃ¬nh.
+Lay danh sach may in service nhan dien duoc, gom Windows/USB printers va LAN printers da luu trong config.
 
 ```ts
 const printers = await printer.getPrinters();
 ```
 
-Káº¿t quáº£:
+Ket qua:
 
 ```ts
 Array<{
@@ -128,30 +128,31 @@ Array<{
 }>
 ```
 
-Vá»›i mÃ¡y in LAN Ä‘Ã£ lÆ°u, response cÃ³ thá»ƒ cÃ³ thÃªm `ip` vÃ  `port`:
+Voi may in LAN da cau hinh category, response co dang:
 
 ```ts
 {
   id: 'kitchen-01',
-  name: 'MÃ¡y in báº¿p',
+  name: 'May in bep',
   type: 'NETWORK',
   status: 'unknown',
   ip: '192.168.100.100',
   port: 9100,
+  categoryIds: ['mon-bep'],
 }
 ```
 
-## API MÃ¡y In LAN
+## API May In LAN
 
 ### `discoverLanPrinters(options?)`
 
-QuÃ©t máº¡ng LAN Ä‘á»ƒ tÃ¬m thiáº¿t bá»‹ Ä‘ang má»Ÿ port in, thÆ°á»ng lÃ  `9100`.
+Quet mang LAN de tim thiet bi dang mo port in, thuong la `9100`.
 
 ```ts
 const result = await printer.discoverLanPrinters();
 ```
 
-CÃ³ thá»ƒ truyá»n subnet thá»§ cÃ´ng náº¿u khÃ´ng muá»‘n service tá»± chá»n card máº¡ng:
+Co the truyen network thu cong:
 
 ```ts
 const result = await printer.discoverLanPrinters({
@@ -162,16 +163,16 @@ const result = await printer.discoverLanPrinters({
 });
 ```
 
-Tham sá»‘:
+Options:
 
-| TÃªn | Kiá»ƒu | Báº¯t buá»™c | MÃ´ táº£ |
+| Ten | Kieu | Bat buoc | Mo ta |
 | --- | --- | --- | --- |
-| `subnetIp` | `string` | KhÃ´ng | IP máº«u trong máº¡ng cáº§n quÃ©t. Náº¿u bá» trá»‘ng, service tá»± láº¥y máº¡ng cá»§a mÃ¡y Ä‘ang cháº¡y. |
-| `netmask` | `string` | KhÃ´ng | Quy Ä‘á»‹nh dáº£i máº¡ng cáº§n quÃ©t, vÃ­ dá»¥ `255.255.255.0` lÃ  quÃ©t `x.x.x.1` Ä‘áº¿n `x.x.x.254`. |
-| `concurrency` | `number` | KhÃ´ng | Sá»‘ IP Ä‘Æ°á»£c quÃ©t song song. |
-| `timeoutMs` | `number` | KhÃ´ng | Thá»i gian chá» má»—i IP/port, tÃ­nh báº±ng mili giÃ¢y. |
+| `subnetIp` | `string` | Khong | IP mau trong mang can quet. Neu bo trong, service tu chon mang cua may dang chay. |
+| `netmask` | `string` | Khong | Netmask cua mang can quet, vi du `255.255.255.0`. |
+| `concurrency` | `number` | Khong | So IP duoc quet song song. |
+| `timeoutMs` | `number` | Khong | Thoi gian cho moi IP/port, tinh bang milliseconds. |
 
-Káº¿t quáº£:
+Ket qua:
 
 ```ts
 {
@@ -193,19 +194,9 @@ Káº¿t quáº£:
 }
 ```
 
-VÃ­ dá»¥:
-
-```ts
-const discovered = await printer.discoverLanPrinters();
-
-for (const item of discovered.printers) {
-  console.log(item.ip, item.port, item.name);
-}
-```
-
 ### `testLanPrinter(payload)`
 
-Gá»­i lá»‡nh in thá»­ trá»±c tiáº¿p tá»›i má»™t IP/port LAN. API nÃ y khÃ´ng lÆ°u cáº¥u hÃ¬nh.
+Gui lenh in thu truc tiep toi mot IP/port LAN. API nay khong luu config.
 
 ```ts
 await printer.testLanPrinter({
@@ -223,18 +214,19 @@ Payload:
 }
 ```
 
-Náº¿u khÃ´ng truyá»n `port`, service dÃ¹ng máº·c Ä‘á»‹nh `9100`.
+Neu khong truyen `port`, service dung mac dinh `9100`.
 
 ### `saveLanPrinter(payload)`
 
-LÆ°u hoáº·c cáº­p nháº­t alias mÃ¡y in LAN vÃ o file cáº¥u hÃ¬nh `printers.json`.
+Luu hoac cap nhat may in LAN vao config. Co the gan luon danh muc san pham ma may in phu trach bang `categoryIds`.
 
 ```ts
-const saved = await printer.saveLanPrinter({
+await printer.saveLanPrinter({
   id: 'kitchen-01',
-  name: 'MÃ¡y in báº¿p',
+  name: 'May in bep',
   host: '192.168.100.100',
   port: 9100,
+  categoryIds: ['mon-bep'],
 });
 ```
 
@@ -246,10 +238,13 @@ Payload:
   name: string;
   host: string;
   port?: number;
+  categoryIds?: string[];
 }
 ```
 
-Káº¿t quáº£:
+Neu `categoryIds` khong duoc truyen khi update printer da ton tai, service se giu category hien co.
+
+Ket qua:
 
 ```ts
 {
@@ -259,6 +254,7 @@ Káº¿t quáº£:
     id: string;
     name: string;
     enabled: boolean;
+    categoryIds: string[];
     connection: {
       type: 'tcp';
       host: string;
@@ -270,17 +266,23 @@ Káº¿t quáº£:
 
 ### `updatePrinterCategories(id, payload)`
 
-Cap nhat danh muc san pham ma may in phu trach. Co the truyen object hoac mang string truc tiep.
+Cap nhat danh muc san pham ma mot may in phu trach.
+
+Co the truyen object:
 
 ```ts
 await printer.updatePrinterCategories('kitchen-01', {
   categoryIds: ['mon-bep', 'mon-nuong'],
 });
+```
 
+Hoac truyen mang string truc tiep:
+
+```ts
 await printer.updatePrinterCategories('bar-01', ['do-uong']);
 ```
 
-API nay goi endpoint:
+Endpoint service tuong ung:
 
 ```text
 PATCH /api/printers/:id/categories
@@ -294,52 +296,39 @@ Payload:
 }
 ```
 
-`saveLanPrinter(payload)` cung co the nhan luon `categoryIds`:
-
-```ts
-await printer.saveLanPrinter({
-  id: 'kitchen-01',
-  name: 'May in bep',
-  host: '192.168.100.100',
-  port: 9100,
-  categoryIds: ['mon-bep'],
-});
-```
 ### `renameLanPrinter(id, payload)`
 
-Äá»•i tÃªn mÃ¡y in LAN Ä‘Ã£ lÆ°u trong `printers.json`.
-
-CÃ³ thá»ƒ truyá»n tÃªn trá»±c tiáº¿p:
+Doi ten may in LAN da luu trong config.
 
 ```ts
-await printer.renameLanPrinter('kitchen-01', 'MÃ¡y in báº¿p táº§ng 1');
+await printer.renameLanPrinter('kitchen-01', 'May in bep tang 1');
 ```
 
-Hoáº·c truyá»n object:
+Hoac:
 
 ```ts
 await printer.renameLanPrinter('kitchen-01', {
-  name: 'MÃ¡y in báº¿p táº§ng 1',
+  name: 'May in bep tang 1',
 });
 ```
 
-API nÃ y chá»‰ Ä‘á»•i `name`, khÃ´ng Ä‘á»•i `host`, `port`, `id` hoáº·c cÃ¡c field khÃ¡c.
+API nay chi doi `name`, khong doi `host`, `port`, `id` hoac `categoryIds`.
 
 ### `deleteLanPrinter(id)`
 
-XÃ³a mÃ¡y in LAN Ä‘Ã£ lÆ°u khá»i `printers.json`.
+Xoa may in LAN da luu khoi config.
 
 ```ts
 await printer.deleteLanPrinter('kitchen-01');
 ```
 
-API nÃ y chá»‰ xÃ³a LAN alias cÃ³ `connection.type = 'tcp'`. MÃ¡y in Windows/USB khÃ´ng bá»‹ áº£nh hÆ°á»Ÿng.
+API nay chi xoa LAN alias co `connection.type = 'tcp'`. May in Windows/USB khong bi anh huong.
 
 ## API In
 
 ### `testPrint(printerId)`
 
-In thá»­ trÃªn má»™t mÃ¡y in Ä‘Ã£ biáº¿t. `printerId` lÃ  `id` hoáº·c `name` láº¥y tá»« `getPrinters()`.
+In thu tren mot may in da biet. `printerId` la `id` hoac `name` lay tu `getPrinters()`.
 
 ```ts
 await printer.testPrint('kitchen-01');
@@ -347,7 +336,13 @@ await printer.testPrint('kitchen-01');
 
 ### `print(payload)`
 
-API in tá»•ng quÃ¡t.
+API in tong quat. Co 3 cach route job:
+
+1. In truc tiep bang `printer`.
+2. In theo `categoryId` top-level.
+3. In va de service tach mon theo `data.items[].categoryId`.
+
+#### In truc tiep bang printer
 
 ```ts
 await printer.print({
@@ -357,45 +352,79 @@ await printer.print({
     storeName: 'Nemo Restaurant',
     orderId: 'ORD-001',
     items: [
-      { name: 'Phá»Ÿ bÃ²', qty: 1, price: 50000 },
-      { name: 'TrÃ  Ä‘Ã¡', qty: 2, price: 5000 },
+      { name: 'Pho bo', qty: 1, price: 50000 },
+      { name: 'Tra da', qty: 2, price: 5000 },
     ],
     total: 60000,
   },
 });
 ```
 
-Payload phá»• biáº¿n:
+#### In theo mot category
 
 ```ts
-{
-  printer: string;
-  template: 'receipt' | 'kitchen' | 'bill' | 'label';
-  data: unknown;
-}
+await printer.print({
+  categoryId: 'mon-bep',
+  template: 'kitchen',
+  data: {
+    table: 'B05',
+    orderId: 'ORD-001',
+    items: [
+      { name: 'Pho bo', qty: 2 },
+    ],
+  },
+});
+```
+
+Service se tim may in enabled co `categoryIds` chua `mon-bep`.
+
+#### In va tach job theo category cua tung item
+
+```ts
+await printer.print({
+  template: 'kitchen',
+  data: {
+    table: 'B05',
+    orderId: 'ORD-001',
+    items: [
+      { categoryId: 'mon-bep', name: 'Pho bo', qty: 2 },
+      { categoryId: 'do-uong', name: 'Tra da', qty: 1 },
+    ],
+  },
+});
+```
+
+Service se group items theo category, resolve may in tu `printers[].categoryIds`, va tao nhieu job neu can.
+
+Response cua `print()` co the la 1 job hoac nhieu job:
+
+```ts
+type PrintResponse =
+  | { success: true; message: string; job: PrintJob }
+  | { success: true; message: string; jobs: PrintJob[] };
 ```
 
 ### `printInvoice(payload)`
 
-In hÃ³a Ä‘Æ¡n dáº¡ng payload top-level, phÃ¹ há»£p khi FE Ä‘Ã£ cÃ³ cáº¥u trÃºc invoice/header/items/summary/payment.
+In hoa don dang payload top-level, phu hop khi FE da co cau truc invoice/header/items/summary/payment.
 
 ```ts
 await printer.printInvoice({
   printer: 'kitchen-01',
   template: 'receipt',
   header: {
-    store_name: 'Cá»­a hÃ ng test',
-    address: '269 Nguyá»…n VÄƒn HuyÃªn',
+    store_name: 'Cua hang test',
+    address: '269 Nguyen Van Huyen',
     phone: '0123456789',
   },
   invoice: {
-    title: 'HÃ“A ÄÆ N BÃN HÃ€NG',
+    title: 'HOA DON BAN HANG',
     code: 'SAL-001',
-    customer: 'KhÃ¡ch láº»',
+    customer: 'Khach le',
   },
   items: [
     {
-      name: 'Cáº£i bÃ³ xÃ´i',
+      name: 'Cai bo xoi',
       quantity: 1,
       unit_price: 62000,
       amount: 62000,
@@ -419,17 +448,34 @@ await printer.printReceipt('kitchen-01', {
   storeName: 'Nemo Restaurant',
   orderId: 'ORD-001',
   items: [
-    { name: 'Phá»Ÿ bÃ²', qty: 1, price: 50000 },
-    { name: 'TrÃ  Ä‘Ã¡', qty: 2, price: 5000 },
+    { name: 'Pho bo', qty: 1, price: 50000 },
+    { name: 'Tra da', qty: 2, price: 5000 },
   ],
   total: 60000,
-  note: 'Cáº£m Æ¡n quÃ½ khÃ¡ch',
+  note: 'Cam on quy khach',
+});
+```
+
+### `printKitchen(printerId, data)`
+
+In phieu bep truc tiep bang printer id.
+
+```ts
+await printer.printKitchen('kitchen-01', {
+  language: 'vi',
+  table: 'B05',
+  orderId: 'ORD-001',
+  orderNote: 'Khach can gap',
+  items: [
+    { name: 'Pho bo', qty: 2, note: 'Khong hanh' },
+    { name: 'Tra da', qty: 1 },
+  ],
 });
 ```
 
 ### `printKitchenByCategory(categoryId, data)`
 
-In phieu bep theo mot danh muc. Service se tim may in enabled co `categoryIds` chua `categoryId`.
+In phieu bep theo mot danh muc. Service se tim may in enabled co `categoryIds` chua category do.
 
 ```ts
 await printer.printKitchenByCategory('mon-bep', {
@@ -444,7 +490,7 @@ await printer.printKitchenByCategory('mon-bep', {
 
 ### `printKitchenByItemCategories(data)`
 
-In phieu bep va de service tach mon theo `items[].categoryId`. Neu don co nhieu danh muc, service co the tao nhieu job in, moi job di toi may in tuong ung.
+In phieu bep va de service tach mon theo `items[].categoryId`.
 
 ```ts
 await printer.printKitchenByItemCategories({
@@ -458,28 +504,6 @@ await printer.printKitchenByItemCategories({
 });
 ```
 
-Response cua `print()` co the la mot job hoac nhieu job:
-
-```ts
-type PrintResponse =
-  | { success: true; message: string; job: PrintJob }
-  | { success: true; message: string; jobs: PrintJob[] };
-```
-### `printKitchen(printerId, data)`
-
-```ts
-await printer.printKitchen('kitchen-01', {
-  language: 'vi',
-  table: 'B05',
-  orderId: 'ORD-001',
-  orderNote: 'KhÃ¡ch cáº§n gáº¥p',
-  items: [
-    { name: 'Phá»Ÿ bÃ²', qty: 2, note: 'KhÃ´ng hÃ nh' },
-    { name: 'TrÃ  Ä‘Ã¡', qty: 1 },
-  ],
-});
-```
-
 ### `printBill(printerId, data)`
 
 ```ts
@@ -487,8 +511,8 @@ await printer.printBill('kitchen-01', {
   storeName: 'Nemo Restaurant',
   table: 'B05',
   items: [
-    { name: 'Phá»Ÿ bÃ²', qty: 1, price: 50000 },
-    { name: 'TrÃ  Ä‘Ã¡', qty: 2, price: 5000 },
+    { name: 'Pho bo', qty: 1, price: 50000 },
+    { name: 'Tra da', qty: 2, price: 5000 },
   ],
   total: 60000,
   discount: 5000,
@@ -501,10 +525,10 @@ await printer.printBill('kitchen-01', {
 
 ```ts
 await printer.printLabel('kitchen-01', {
-  productName: 'CÃ  phÃª sá»¯a Ä‘Ã¡',
+  productName: 'Ca phe sua da',
   price: 29000,
   barcode: '8930000000012',
-  note: 'Ãt Ä‘Ã¡',
+  note: 'It da',
 });
 ```
 
@@ -512,21 +536,38 @@ await printer.printLabel('kitchen-01', {
 
 ### `getQueue()`
 
-Láº¥y danh sÃ¡ch job in trong hÃ ng Ä‘á»£i.
+Lay danh sach job in trong hang doi.
 
 ```ts
 const queue = await printer.getQueue();
 ```
 
+Job co the co `categoryId` neu duoc route theo category.
+
+```ts
+Array<{
+  id: number;
+  status: 'waiting' | 'printing' | 'spooled' | 'completed' | 'failed';
+  printer: string;
+  printerName: string;
+  template: string;
+  categoryId?: string;
+  attempts: number;
+  maxAttempts: number;
+  lastError?: string;
+  spoolerJobId?: number;
+}>
+```
+
 ### `getFailedQueue()`
 
-Láº¥y danh sÃ¡ch job in Ä‘Ã£ lá»—i sau khi retry háº¿t sá»‘ láº§n cho phÃ©p.
+Lay danh sach job in da loi sau khi retry het so lan cho phep.
 
 ```ts
 const failedJobs = await printer.getFailedQueue();
 ```
 
-Job lá»—i cÃ³ thá»ƒ chá»©a payload gá»‘c Ä‘á»ƒ FE hiá»ƒn thá»‹ láº¡i ná»™i dung bill/mÃ³n bá»‹ lá»—i:
+Job loi co the chua payload goc de FE hien thi lai noi dung bill/mon bi loi:
 
 ```ts
 Array<{
@@ -535,6 +576,7 @@ Array<{
   printer: string;
   printerName: string;
   template: string;
+  categoryId?: string;
   attempts: number;
   maxAttempts: number;
   lastError?: string;
@@ -545,19 +587,19 @@ Array<{
 
 ### `retryQueue(payload?)`
 
-Retry toÃ n bá»™ job lá»—i:
+Retry toan bo job loi:
 
 ```ts
 await printer.retryQueue();
 ```
 
-Retry má»™t job cá»¥ thá»ƒ:
+Retry mot job cu the:
 
 ```ts
 await printer.retryQueue({ id: 5 });
 ```
 
-Hoáº·c:
+Hoac:
 
 ```ts
 await printer.retryQueue({ jobId: 5 });
@@ -565,13 +607,13 @@ await printer.retryQueue({ jobId: 5 });
 
 ### `clearQueue()`
 
-XÃ³a cÃ¡c job trong queue theo logic cá»§a service.
+Xoa cac job trong queue theo logic cua service.
 
 ```ts
 const result = await printer.clearQueue();
 ```
 
-Káº¿t quáº£:
+Ket qua:
 
 ```ts
 {
@@ -580,16 +622,16 @@ Káº¿t quáº£:
 }
 ```
 
-## Xá»­ LÃ½ Lá»—i Cho FE
+## Xu Ly Loi Cho FE
 
-Táº¥t cáº£ method trong SDK cÃ³ thá»ƒ throw `PrinterSDKError`.
+Tat ca method trong SDK co the throw `PrinterSDKError`.
 
-CÃ³ 2 nhÃ³m lá»—i chÃ­nh:
+Co 2 nhom loi chinh:
 
-1. Service Ä‘ang cháº¡y nhÆ°ng API tráº£ HTTP lá»—i, vÃ­ dá»¥ sai `printerId`, thiáº¿u field, khÃ´ng tÃ¬m tháº¥y LAN alias.
-2. Service khÃ´ng káº¿t ná»‘i Ä‘Æ°á»£c, vÃ­ dá»¥ app in chÆ°a má»Ÿ hoáº·c port `9000` chÆ°a listen.
+1. Service dang chay nhung API tra HTTP loi, vi du sai `printerId`, thieu field, category chua cau hinh may in.
+2. Service khong ket noi duoc, vi du app in chua mo hoac port `9000` chua listen.
 
-VÃ­ dá»¥ báº¯t lá»—i chuáº©n á»Ÿ FE:
+Vi du bat loi chuan o FE:
 
 ```ts
 import { PrinterSDK, PrinterSDKError } from '@tpcoms/printer-sdk';
@@ -605,35 +647,36 @@ try {
     return;
   }
 
-  showToast('CÃ³ lá»—i khÃ´ng xÃ¡c Ä‘á»‹nh khi káº¿t ná»‘i mÃ¡y in');
+  showToast('Co loi khong xac dinh khi ket noi may in');
 }
 ```
 
-Khi service chÆ°a cháº¡y, SDK sáº½ throw message:
+Khi service chua chay, SDK se throw message:
 
 ```text
 Khong ket noi duoc Printer Service. Vui long mo lai ung dung in.
 ```
 
-FE nÃªn hiá»ƒn thá»‹ message nÃ y báº±ng toast/modal/snackbar tÃ¹y UI cá»§a dá»± Ã¡n. SDK khÃ´ng tá»± `alert`, vÃ¬ SDK khÃ´ng biáº¿t FE Ä‘ang dÃ¹ng React, Vue, Angular, mobile web hay POS desktop.
-
-CÃ¡c thÃ´ng tin lá»—i cÃ³ sáºµn:
+Thong tin loi co san:
 
 ```ts
 try {
-  await printer.testPrint('unknown-printer');
+  await printer.printKitchenByCategory('chua-cau-hinh', {
+    table: 'B05',
+    items: [{ name: 'Pho bo', qty: 1 }],
+  });
 } catch (error) {
   if (error instanceof PrinterSDKError) {
-    console.log(error.message); // message thÃ¢n thiá»‡n
-    console.log(error.status);  // HTTP status náº¿u cÃ³
-    console.log(error.details); // response body hoáº·c lá»—i gá»‘c
+    console.log(error.message); // vi du: Danh muc chua cau hinh may in: chua-cau-hinh
+    console.log(error.status);  // HTTP status neu co
+    console.log(error.details); // response body hoac loi goc
   }
 }
 ```
 
-## Thá»© Tá»± Gá»i API Äá» Xuáº¥t
+## Thu Tu Goi API De Xuat
 
-### In báº±ng mÃ¡y in Ä‘Ã£ cÃ³
+### In bang may in da co
 
 ```ts
 const printer = new PrinterSDK();
@@ -648,11 +691,11 @@ await printer.testPrint(selectedPrinter.id);
 await printer.printKitchen(selectedPrinter.id, {
   language: 'vi',
   table: 'B05',
-  items: [{ name: 'Phá»Ÿ bÃ²', qty: 1 }],
+  items: [{ name: 'Pho bo', qty: 1 }],
 });
 ```
 
-### ThÃªm mÃ¡y in LAN má»›i
+### Them may in LAN va gan category
 
 ```ts
 const discovery = await printer.discoverLanPrinters();
@@ -665,28 +708,43 @@ await printer.testLanPrinter({
 
 await printer.saveLanPrinter({
   id: 'kitchen-01',
-  name: 'MÃ¡y in báº¿p',
+  name: 'May in bep',
   host: target.ip,
   port: target.port,
+  categoryIds: ['mon-bep'],
 });
 ```
 
-### Äá»•i tÃªn hoáº·c xÃ³a mÃ¡y in LAN Ä‘Ã£ lÆ°u
+### Tach job in bep theo category cua mon
 
 ```ts
-await printer.renameLanPrinter('kitchen-01', 'MÃ¡y in báº¿p táº§ng 1');
+await printer.printKitchenByItemCategories({
+  language: 'vi',
+  table: 'B05',
+  orderId: 'ORD-001',
+  items: [
+    { categoryId: 'mon-bep', name: 'Pho bo', qty: 2 },
+    { categoryId: 'do-uong', name: 'Tra da', qty: 1 },
+  ],
+});
+```
+
+### Doi ten hoac xoa may in LAN da luu
+
+```ts
+await printer.renameLanPrinter('kitchen-01', 'May in bep tang 1');
 await printer.deleteLanPrinter('kitchen-01');
 ```
 
-## Publish LÃªn Npm
+## Publish Len Npm
 
-Package hiá»‡n dÃ¹ng scope:
+Package hien dung scope:
 
 ```text
 @tpcoms/printer-sdk
 ```
 
-TrÆ°á»›c khi publish:
+Truoc khi publish:
 
 ```bash
 npm login
@@ -695,7 +753,7 @@ npm run build
 npm publish --access public
 ```
 
-TrÃªn Windows:
+Tren Windows:
 
 ```powershell
 npm.cmd run build
