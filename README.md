@@ -1,42 +1,42 @@
-# @nemoprint/printer-sdk
+# @tpcoms/printer-sdk
 
-SDK TypeScript dùng để gọi **NemoPOS Printer Service** đang chạy trên máy local của người dùng.
+SDK TypeScript dÃ¹ng Ä‘á»ƒ gá»i **NemoPOS Printer Service** Ä‘ang cháº¡y trÃªn mÃ¡y local cá»§a ngÆ°á»i dÃ¹ng.
 
-SDK này không thay thế ứng dụng desktop/service in. Trước khi gọi API, máy người dùng cần cài và mở NemoPOS Printer Service. Mặc định SDK gọi service tại:
+SDK nÃ y khÃ´ng thay tháº¿ á»©ng dá»¥ng desktop/service in. TrÆ°á»›c khi gá»i API, mÃ¡y ngÆ°á»i dÃ¹ng cáº§n cÃ i vÃ  má»Ÿ NemoPOS Printer Service. Máº·c Ä‘á»‹nh SDK gá»i service táº¡i:
 
 ```text
 http://localhost:9000
 ```
 
-## Cài Đặt
+## CÃ i Äáº·t
 
 ```bash
-npm install @nemoprint/printer-sdk
+npm install @tpcoms/printer-sdk
 ```
 
-Nếu đang phát triển trực tiếp trong repo SDK:
+Náº¿u Ä‘ang phÃ¡t triá»ƒn trá»±c tiáº¿p trong repo SDK:
 
 ```bash
 npm install
 npm run build
 ```
 
-Trên Windows, nếu PowerShell chặn `npm` vì Execution Policy, dùng:
+TrÃªn Windows, náº¿u PowerShell cháº·n `npm` vÃ¬ Execution Policy, dÃ¹ng:
 
 ```powershell
 npm.cmd install
 npm.cmd run build
 ```
 
-## Khởi Tạo
+## Khá»Ÿi Táº¡o
 
 ```ts
-import { PrinterSDK } from '@nemoprint/printer-sdk';
+import { PrinterSDK } from '@tpcoms/printer-sdk';
 
 const printer = new PrinterSDK();
 ```
 
-Nếu Printer Service chạy ở URL khác:
+Náº¿u Printer Service cháº¡y á»Ÿ URL khÃ¡c:
 
 ```ts
 const printer = new PrinterSDK({
@@ -44,7 +44,7 @@ const printer = new PrinterSDK({
 });
 ```
 
-Nếu môi trường chạy không có `fetch` global, truyền `fetchImpl`:
+Náº¿u mÃ´i trÆ°á»ng cháº¡y khÃ´ng cÃ³ `fetch` global, truyá»n `fetchImpl`:
 
 ```ts
 const printer = new PrinterSDK({
@@ -52,10 +52,10 @@ const printer = new PrinterSDK({
 });
 ```
 
-## Luồng Sử Dụng Nhanh
+## Luá»“ng Sá»­ Dá»¥ng Nhanh
 
 ```ts
-import { PrinterSDK, PrinterSDKError } from '@nemoprint/printer-sdk';
+import { PrinterSDK, PrinterSDKError } from '@tpcoms/printer-sdk';
 
 const printer = new PrinterSDK();
 
@@ -71,10 +71,10 @@ try {
     language: 'vi',
     table: 'B05',
     orderId: 'ORD-001',
-    orderNote: 'Khách cần gấp',
+    orderNote: 'KhÃ¡ch cáº§n gáº¥p',
     items: [
-      { name: 'Phở bò', qty: 2, note: 'Không hành' },
-      { name: 'Trà đá', qty: 1 },
+      { name: 'Phá»Ÿ bÃ²', qty: 2, note: 'KhÃ´ng hÃ nh' },
+      { name: 'TrÃ  Ä‘Ã¡', qty: 1 },
     ],
   });
 } catch (error) {
@@ -90,13 +90,13 @@ try {
 
 ### `health()`
 
-Kiểm tra Printer Service có đang chạy không.
+Kiá»ƒm tra Printer Service cÃ³ Ä‘ang cháº¡y khÃ´ng.
 
 ```ts
 const health = await printer.health();
 ```
 
-Kết quả:
+Káº¿t quáº£:
 
 ```ts
 {
@@ -108,13 +108,13 @@ Kết quả:
 
 ### `getPrinters()`
 
-Lấy danh sách máy in service nhận diện được, gồm máy in Windows/USB và LAN alias đã lưu trong file cấu hình.
+Láº¥y danh sÃ¡ch mÃ¡y in service nháº­n diá»‡n Ä‘Æ°á»£c, gá»“m mÃ¡y in Windows/USB vÃ  LAN alias Ä‘Ã£ lÆ°u trong file cáº¥u hÃ¬nh.
 
 ```ts
 const printers = await printer.getPrinters();
 ```
 
-Kết quả:
+Káº¿t quáº£:
 
 ```ts
 Array<{
@@ -124,15 +124,16 @@ Array<{
   type?: string;
   ip?: string;
   port?: string | number;
+  categoryIds?: string[];
 }>
 ```
 
-Với máy in LAN đã lưu, response có thể có thêm `ip` và `port`:
+Vá»›i mÃ¡y in LAN Ä‘Ã£ lÆ°u, response cÃ³ thá»ƒ cÃ³ thÃªm `ip` vÃ  `port`:
 
 ```ts
 {
   id: 'kitchen-01',
-  name: 'Máy in bếp',
+  name: 'MÃ¡y in báº¿p',
   type: 'NETWORK',
   status: 'unknown',
   ip: '192.168.100.100',
@@ -140,17 +141,17 @@ Với máy in LAN đã lưu, response có thể có thêm `ip` và `port`:
 }
 ```
 
-## API Máy In LAN
+## API MÃ¡y In LAN
 
 ### `discoverLanPrinters(options?)`
 
-Quét mạng LAN để tìm thiết bị đang mở port in, thường là `9100`.
+QuÃ©t máº¡ng LAN Ä‘á»ƒ tÃ¬m thiáº¿t bá»‹ Ä‘ang má»Ÿ port in, thÆ°á»ng lÃ  `9100`.
 
 ```ts
 const result = await printer.discoverLanPrinters();
 ```
 
-Có thể truyền subnet thủ công nếu không muốn service tự chọn card mạng:
+CÃ³ thá»ƒ truyá»n subnet thá»§ cÃ´ng náº¿u khÃ´ng muá»‘n service tá»± chá»n card máº¡ng:
 
 ```ts
 const result = await printer.discoverLanPrinters({
@@ -161,16 +162,16 @@ const result = await printer.discoverLanPrinters({
 });
 ```
 
-Tham số:
+Tham sá»‘:
 
-| Tên | Kiểu | Bắt buộc | Mô tả |
+| TÃªn | Kiá»ƒu | Báº¯t buá»™c | MÃ´ táº£ |
 | --- | --- | --- | --- |
-| `subnetIp` | `string` | Không | IP mẫu trong mạng cần quét. Nếu bỏ trống, service tự lấy mạng của máy đang chạy. |
-| `netmask` | `string` | Không | Quy định dải mạng cần quét, ví dụ `255.255.255.0` là quét `x.x.x.1` đến `x.x.x.254`. |
-| `concurrency` | `number` | Không | Số IP được quét song song. |
-| `timeoutMs` | `number` | Không | Thời gian chờ mỗi IP/port, tính bằng mili giây. |
+| `subnetIp` | `string` | KhÃ´ng | IP máº«u trong máº¡ng cáº§n quÃ©t. Náº¿u bá» trá»‘ng, service tá»± láº¥y máº¡ng cá»§a mÃ¡y Ä‘ang cháº¡y. |
+| `netmask` | `string` | KhÃ´ng | Quy Ä‘á»‹nh dáº£i máº¡ng cáº§n quÃ©t, vÃ­ dá»¥ `255.255.255.0` lÃ  quÃ©t `x.x.x.1` Ä‘áº¿n `x.x.x.254`. |
+| `concurrency` | `number` | KhÃ´ng | Sá»‘ IP Ä‘Æ°á»£c quÃ©t song song. |
+| `timeoutMs` | `number` | KhÃ´ng | Thá»i gian chá» má»—i IP/port, tÃ­nh báº±ng mili giÃ¢y. |
 
-Kết quả:
+Káº¿t quáº£:
 
 ```ts
 {
@@ -192,7 +193,7 @@ Kết quả:
 }
 ```
 
-Ví dụ:
+VÃ­ dá»¥:
 
 ```ts
 const discovered = await printer.discoverLanPrinters();
@@ -204,7 +205,7 @@ for (const item of discovered.printers) {
 
 ### `testLanPrinter(payload)`
 
-Gửi lệnh in thử trực tiếp tới một IP/port LAN. API này không lưu cấu hình.
+Gá»­i lá»‡nh in thá»­ trá»±c tiáº¿p tá»›i má»™t IP/port LAN. API nÃ y khÃ´ng lÆ°u cáº¥u hÃ¬nh.
 
 ```ts
 await printer.testLanPrinter({
@@ -222,16 +223,16 @@ Payload:
 }
 ```
 
-Nếu không truyền `port`, service dùng mặc định `9100`.
+Náº¿u khÃ´ng truyá»n `port`, service dÃ¹ng máº·c Ä‘á»‹nh `9100`.
 
 ### `saveLanPrinter(payload)`
 
-Lưu hoặc cập nhật alias máy in LAN vào file cấu hình `printers.json`.
+LÆ°u hoáº·c cáº­p nháº­t alias mÃ¡y in LAN vÃ o file cáº¥u hÃ¬nh `printers.json`.
 
 ```ts
 const saved = await printer.saveLanPrinter({
   id: 'kitchen-01',
-  name: 'Máy in bếp',
+  name: 'MÃ¡y in báº¿p',
   host: '192.168.100.100',
   port: 9100,
 });
@@ -248,7 +249,7 @@ Payload:
 }
 ```
 
-Kết quả:
+Káº¿t quáº£:
 
 ```ts
 {
@@ -267,41 +268,78 @@ Kết quả:
 }
 ```
 
-### `renameLanPrinter(id, payload)`
+### `updatePrinterCategories(id, payload)`
 
-Đổi tên máy in LAN đã lưu trong `printers.json`.
-
-Có thể truyền tên trực tiếp:
+Cap nhat danh muc san pham ma may in phu trach. Co the truyen object hoac mang string truc tiep.
 
 ```ts
-await printer.renameLanPrinter('kitchen-01', 'Máy in bếp tầng 1');
+await printer.updatePrinterCategories('kitchen-01', {
+  categoryIds: ['mon-bep', 'mon-nuong'],
+});
+
+await printer.updatePrinterCategories('bar-01', ['do-uong']);
 ```
 
-Hoặc truyền object:
+API nay goi endpoint:
+
+```text
+PATCH /api/printers/:id/categories
+```
+
+Payload:
+
+```ts
+{
+  categoryIds: string[];
+}
+```
+
+`saveLanPrinter(payload)` cung co the nhan luon `categoryIds`:
+
+```ts
+await printer.saveLanPrinter({
+  id: 'kitchen-01',
+  name: 'May in bep',
+  host: '192.168.100.100',
+  port: 9100,
+  categoryIds: ['mon-bep'],
+});
+```
+### `renameLanPrinter(id, payload)`
+
+Äá»•i tÃªn mÃ¡y in LAN Ä‘Ã£ lÆ°u trong `printers.json`.
+
+CÃ³ thá»ƒ truyá»n tÃªn trá»±c tiáº¿p:
+
+```ts
+await printer.renameLanPrinter('kitchen-01', 'MÃ¡y in báº¿p táº§ng 1');
+```
+
+Hoáº·c truyá»n object:
 
 ```ts
 await printer.renameLanPrinter('kitchen-01', {
-  name: 'Máy in bếp tầng 1',
+  name: 'MÃ¡y in báº¿p táº§ng 1',
 });
 ```
 
-API này chỉ đổi `name`, không đổi `host`, `port`, `id` hoặc các field khác.
+API nÃ y chá»‰ Ä‘á»•i `name`, khÃ´ng Ä‘á»•i `host`, `port`, `id` hoáº·c cÃ¡c field khÃ¡c.
 
 ### `deleteLanPrinter(id)`
 
-Xóa máy in LAN đã lưu khỏi `printers.json`.
+XÃ³a mÃ¡y in LAN Ä‘Ã£ lÆ°u khá»i `printers.json`.
 
 ```ts
 await printer.deleteLanPrinter('kitchen-01');
 ```
 
-API này chỉ xóa LAN alias có `connection.type = 'tcp'`. Máy in Windows/USB không bị ảnh hưởng.
+API nÃ y chá»‰ xÃ³a LAN alias cÃ³ `connection.type = 'tcp'`. MÃ¡y in Windows/USB khÃ´ng bá»‹ áº£nh hÆ°á»Ÿng.
 
 ## API In
 
 ### `testPrint(printerId)`
 
-In thử trên một máy in đã biết. `printerId` là `id` hoặc `name` lấy từ `getPrinters()`.
+In thá»­ trÃªn má»™t mÃ¡y in Ä‘Ã£ biáº¿t. `printerId` lÃ  `id` hoáº·c `name` láº¥y tá»« `getPrinters()`.
 
 ```ts
 await printer.testPrint('kitchen-01');
@@ -309,7 +347,7 @@ await printer.testPrint('kitchen-01');
 
 ### `print(payload)`
 
-API in tổng quát.
+API in tá»•ng quÃ¡t.
 
 ```ts
 await printer.print({
@@ -319,15 +357,15 @@ await printer.print({
     storeName: 'Nemo Restaurant',
     orderId: 'ORD-001',
     items: [
-      { name: 'Phở bò', qty: 1, price: 50000 },
-      { name: 'Trà đá', qty: 2, price: 5000 },
+      { name: 'Phá»Ÿ bÃ²', qty: 1, price: 50000 },
+      { name: 'TrÃ  Ä‘Ã¡', qty: 2, price: 5000 },
     ],
     total: 60000,
   },
 });
 ```
 
-Payload phổ biến:
+Payload phá»• biáº¿n:
 
 ```ts
 {
@@ -339,25 +377,25 @@ Payload phổ biến:
 
 ### `printInvoice(payload)`
 
-In hóa đơn dạng payload top-level, phù hợp khi FE đã có cấu trúc invoice/header/items/summary/payment.
+In hÃ³a Ä‘Æ¡n dáº¡ng payload top-level, phÃ¹ há»£p khi FE Ä‘Ã£ cÃ³ cáº¥u trÃºc invoice/header/items/summary/payment.
 
 ```ts
 await printer.printInvoice({
   printer: 'kitchen-01',
   template: 'receipt',
   header: {
-    store_name: 'Cửa hàng test',
-    address: '269 Nguyễn Văn Huyên',
+    store_name: 'Cá»­a hÃ ng test',
+    address: '269 Nguyá»…n VÄƒn HuyÃªn',
     phone: '0123456789',
   },
   invoice: {
-    title: 'HÓA ĐƠN BÁN HÀNG',
+    title: 'HÃ“A ÄÆ N BÃN HÃ€NG',
     code: 'SAL-001',
-    customer: 'Khách lẻ',
+    customer: 'KhÃ¡ch láº»',
   },
   items: [
     {
-      name: 'Cải bó xôi',
+      name: 'Cáº£i bÃ³ xÃ´i',
       quantity: 1,
       unit_price: 62000,
       amount: 62000,
@@ -381,14 +419,52 @@ await printer.printReceipt('kitchen-01', {
   storeName: 'Nemo Restaurant',
   orderId: 'ORD-001',
   items: [
-    { name: 'Phở bò', qty: 1, price: 50000 },
-    { name: 'Trà đá', qty: 2, price: 5000 },
+    { name: 'Phá»Ÿ bÃ²', qty: 1, price: 50000 },
+    { name: 'TrÃ  Ä‘Ã¡', qty: 2, price: 5000 },
   ],
   total: 60000,
-  note: 'Cảm ơn quý khách',
+  note: 'Cáº£m Æ¡n quÃ½ khÃ¡ch',
 });
 ```
 
+### `printKitchenByCategory(categoryId, data)`
+
+In phieu bep theo mot danh muc. Service se tim may in enabled co `categoryIds` chua `categoryId`.
+
+```ts
+await printer.printKitchenByCategory('mon-bep', {
+  language: 'vi',
+  table: 'B05',
+  orderId: 'ORD-001',
+  items: [
+    { name: 'Pho bo', qty: 2, note: 'Khong hanh' },
+  ],
+});
+```
+
+### `printKitchenByItemCategories(data)`
+
+In phieu bep va de service tach mon theo `items[].categoryId`. Neu don co nhieu danh muc, service co the tao nhieu job in, moi job di toi may in tuong ung.
+
+```ts
+await printer.printKitchenByItemCategories({
+  language: 'vi',
+  table: 'B05',
+  orderId: 'ORD-001',
+  items: [
+    { categoryId: 'mon-bep', name: 'Pho bo', qty: 2 },
+    { categoryId: 'do-uong', name: 'Tra da', qty: 1 },
+  ],
+});
+```
+
+Response cua `print()` co the la mot job hoac nhieu job:
+
+```ts
+type PrintResponse =
+  | { success: true; message: string; job: PrintJob }
+  | { success: true; message: string; jobs: PrintJob[] };
+```
 ### `printKitchen(printerId, data)`
 
 ```ts
@@ -396,10 +472,10 @@ await printer.printKitchen('kitchen-01', {
   language: 'vi',
   table: 'B05',
   orderId: 'ORD-001',
-  orderNote: 'Khách cần gấp',
+  orderNote: 'KhÃ¡ch cáº§n gáº¥p',
   items: [
-    { name: 'Phở bò', qty: 2, note: 'Không hành' },
-    { name: 'Trà đá', qty: 1 },
+    { name: 'Phá»Ÿ bÃ²', qty: 2, note: 'KhÃ´ng hÃ nh' },
+    { name: 'TrÃ  Ä‘Ã¡', qty: 1 },
   ],
 });
 ```
@@ -411,8 +487,8 @@ await printer.printBill('kitchen-01', {
   storeName: 'Nemo Restaurant',
   table: 'B05',
   items: [
-    { name: 'Phở bò', qty: 1, price: 50000 },
-    { name: 'Trà đá', qty: 2, price: 5000 },
+    { name: 'Phá»Ÿ bÃ²', qty: 1, price: 50000 },
+    { name: 'TrÃ  Ä‘Ã¡', qty: 2, price: 5000 },
   ],
   total: 60000,
   discount: 5000,
@@ -425,10 +501,10 @@ await printer.printBill('kitchen-01', {
 
 ```ts
 await printer.printLabel('kitchen-01', {
-  productName: 'Cà phê sữa đá',
+  productName: 'CÃ  phÃª sá»¯a Ä‘Ã¡',
   price: 29000,
   barcode: '8930000000012',
-  note: 'Ít đá',
+  note: 'Ãt Ä‘Ã¡',
 });
 ```
 
@@ -436,7 +512,7 @@ await printer.printLabel('kitchen-01', {
 
 ### `getQueue()`
 
-Lấy danh sách job in trong hàng đợi.
+Láº¥y danh sÃ¡ch job in trong hÃ ng Ä‘á»£i.
 
 ```ts
 const queue = await printer.getQueue();
@@ -444,13 +520,13 @@ const queue = await printer.getQueue();
 
 ### `getFailedQueue()`
 
-Lấy danh sách job in đã lỗi sau khi retry hết số lần cho phép.
+Láº¥y danh sÃ¡ch job in Ä‘Ã£ lá»—i sau khi retry háº¿t sá»‘ láº§n cho phÃ©p.
 
 ```ts
 const failedJobs = await printer.getFailedQueue();
 ```
 
-Job lỗi có thể chứa payload gốc để FE hiển thị lại nội dung bill/món bị lỗi:
+Job lá»—i cÃ³ thá»ƒ chá»©a payload gá»‘c Ä‘á»ƒ FE hiá»ƒn thá»‹ láº¡i ná»™i dung bill/mÃ³n bá»‹ lá»—i:
 
 ```ts
 Array<{
@@ -469,19 +545,19 @@ Array<{
 
 ### `retryQueue(payload?)`
 
-Retry toàn bộ job lỗi:
+Retry toÃ n bá»™ job lá»—i:
 
 ```ts
 await printer.retryQueue();
 ```
 
-Retry một job cụ thể:
+Retry má»™t job cá»¥ thá»ƒ:
 
 ```ts
 await printer.retryQueue({ id: 5 });
 ```
 
-Hoặc:
+Hoáº·c:
 
 ```ts
 await printer.retryQueue({ jobId: 5 });
@@ -489,13 +565,13 @@ await printer.retryQueue({ jobId: 5 });
 
 ### `clearQueue()`
 
-Xóa các job trong queue theo logic của service.
+XÃ³a cÃ¡c job trong queue theo logic cá»§a service.
 
 ```ts
 const result = await printer.clearQueue();
 ```
 
-Kết quả:
+Káº¿t quáº£:
 
 ```ts
 {
@@ -504,19 +580,19 @@ Kết quả:
 }
 ```
 
-## Xử Lý Lỗi Cho FE
+## Xá»­ LÃ½ Lá»—i Cho FE
 
-Tất cả method trong SDK có thể throw `PrinterSDKError`.
+Táº¥t cáº£ method trong SDK cÃ³ thá»ƒ throw `PrinterSDKError`.
 
-Có 2 nhóm lỗi chính:
+CÃ³ 2 nhÃ³m lá»—i chÃ­nh:
 
-1. Service đang chạy nhưng API trả HTTP lỗi, ví dụ sai `printerId`, thiếu field, không tìm thấy LAN alias.
-2. Service không kết nối được, ví dụ app in chưa mở hoặc port `9000` chưa listen.
+1. Service Ä‘ang cháº¡y nhÆ°ng API tráº£ HTTP lá»—i, vÃ­ dá»¥ sai `printerId`, thiáº¿u field, khÃ´ng tÃ¬m tháº¥y LAN alias.
+2. Service khÃ´ng káº¿t ná»‘i Ä‘Æ°á»£c, vÃ­ dá»¥ app in chÆ°a má»Ÿ hoáº·c port `9000` chÆ°a listen.
 
-Ví dụ bắt lỗi chuẩn ở FE:
+VÃ­ dá»¥ báº¯t lá»—i chuáº©n á»Ÿ FE:
 
 ```ts
-import { PrinterSDK, PrinterSDKError } from '@nemoprint/printer-sdk';
+import { PrinterSDK, PrinterSDKError } from '@tpcoms/printer-sdk';
 
 const printer = new PrinterSDK();
 
@@ -529,35 +605,35 @@ try {
     return;
   }
 
-  showToast('Có lỗi không xác định khi kết nối máy in');
+  showToast('CÃ³ lá»—i khÃ´ng xÃ¡c Ä‘á»‹nh khi káº¿t ná»‘i mÃ¡y in');
 }
 ```
 
-Khi service chưa chạy, SDK sẽ throw message:
+Khi service chÆ°a cháº¡y, SDK sáº½ throw message:
 
 ```text
 Khong ket noi duoc Printer Service. Vui long mo lai ung dung in.
 ```
 
-FE nên hiển thị message này bằng toast/modal/snackbar tùy UI của dự án. SDK không tự `alert`, vì SDK không biết FE đang dùng React, Vue, Angular, mobile web hay POS desktop.
+FE nÃªn hiá»ƒn thá»‹ message nÃ y báº±ng toast/modal/snackbar tÃ¹y UI cá»§a dá»± Ã¡n. SDK khÃ´ng tá»± `alert`, vÃ¬ SDK khÃ´ng biáº¿t FE Ä‘ang dÃ¹ng React, Vue, Angular, mobile web hay POS desktop.
 
-Các thông tin lỗi có sẵn:
+CÃ¡c thÃ´ng tin lá»—i cÃ³ sáºµn:
 
 ```ts
 try {
   await printer.testPrint('unknown-printer');
 } catch (error) {
   if (error instanceof PrinterSDKError) {
-    console.log(error.message); // message thân thiện
-    console.log(error.status);  // HTTP status nếu có
-    console.log(error.details); // response body hoặc lỗi gốc
+    console.log(error.message); // message thÃ¢n thiá»‡n
+    console.log(error.status);  // HTTP status náº¿u cÃ³
+    console.log(error.details); // response body hoáº·c lá»—i gá»‘c
   }
 }
 ```
 
-## Thứ Tự Gọi API Đề Xuất
+## Thá»© Tá»± Gá»i API Äá» Xuáº¥t
 
-### In bằng máy in đã có
+### In báº±ng mÃ¡y in Ä‘Ã£ cÃ³
 
 ```ts
 const printer = new PrinterSDK();
@@ -572,11 +648,11 @@ await printer.testPrint(selectedPrinter.id);
 await printer.printKitchen(selectedPrinter.id, {
   language: 'vi',
   table: 'B05',
-  items: [{ name: 'Phở bò', qty: 1 }],
+  items: [{ name: 'Phá»Ÿ bÃ²', qty: 1 }],
 });
 ```
 
-### Thêm máy in LAN mới
+### ThÃªm mÃ¡y in LAN má»›i
 
 ```ts
 const discovery = await printer.discoverLanPrinters();
@@ -589,28 +665,28 @@ await printer.testLanPrinter({
 
 await printer.saveLanPrinter({
   id: 'kitchen-01',
-  name: 'Máy in bếp',
+  name: 'MÃ¡y in báº¿p',
   host: target.ip,
   port: target.port,
 });
 ```
 
-### Đổi tên hoặc xóa máy in LAN đã lưu
+### Äá»•i tÃªn hoáº·c xÃ³a mÃ¡y in LAN Ä‘Ã£ lÆ°u
 
 ```ts
-await printer.renameLanPrinter('kitchen-01', 'Máy in bếp tầng 1');
+await printer.renameLanPrinter('kitchen-01', 'MÃ¡y in báº¿p táº§ng 1');
 await printer.deleteLanPrinter('kitchen-01');
 ```
 
-## Publish Lên Npm
+## Publish LÃªn Npm
 
-Package hiện dùng scope:
+Package hiá»‡n dÃ¹ng scope:
 
 ```text
-@nemoprint/printer-sdk
+@tpcoms/printer-sdk
 ```
 
-Trước khi publish:
+TrÆ°á»›c khi publish:
 
 ```bash
 npm login
@@ -619,7 +695,7 @@ npm run build
 npm publish --access public
 ```
 
-Trên Windows:
+TrÃªn Windows:
 
 ```powershell
 npm.cmd run build

@@ -1,4 +1,4 @@
-const { PrinterSDK } = require('@nemoprint/printer-sdk');
+const { PrinterSDK } = require('@tpcoms/printer-sdk');
 
 async function main() {
   const printer = new PrinterSDK();

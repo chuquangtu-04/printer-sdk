@@ -2,6 +2,7 @@ export { PrinterSDK, PrinterSDKError } from './PrinterSDK';
 export type {
   BillData,
   BillItem,
+  CategoryPrintPayload,
   ClearQueueResponse,
   ConfiguredLanPrinter,
   FailedPrintJob,
@@ -13,6 +14,7 @@ export type {
   InvoicePrintPayload,
   InvoiceQrCode,
   InvoiceSummary,
+  ItemCategoryPrintPayload,
   KitchenData,
   KitchenItem,
   LanPrinterActionResponse,
@@ -38,4 +40,5 @@ export type {
   TemplatePrintPayload,
   TestLanPrinterPayload,
   TestPrintResponse,
+  UpdatePrinterCategoriesPayload,
 } from './types';

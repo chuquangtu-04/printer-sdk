@@ -20,6 +20,7 @@ export interface PrinterInfo {
   type?: string;
   ip?: string;
   port?: string | number;
+  categoryIds?: string[];
   [key: string]: unknown;
 }
 
@@ -62,10 +63,15 @@ export interface SaveLanPrinterPayload {
   name: string;
   host: string;
   port?: number;
+  categoryIds?: string[];
 }
 
 export interface RenameLanPrinterPayload {
   name: string;
+}
+
+export interface UpdatePrinterCategoriesPayload {
+  categoryIds: string[];
 }
 
 export interface ConfiguredLanPrinter {
@@ -77,6 +83,7 @@ export interface ConfiguredLanPrinter {
     host: string;
     port?: number;
   };
+  categoryIds: string[];
 }
 
 export interface LanPrinterActionResponse {
@@ -103,6 +110,9 @@ export interface KitchenItem {
   name: string;
   qty: number;
   note?: string;
+  categoryId?: string;
+  category_id?: string;
+  category?: string;
 }
 
 export interface KitchenData {
@@ -140,6 +150,17 @@ export interface LabelData {
 
 export interface TemplatePrintPayload<TTemplate extends PrintTemplate = PrintTemplate, TData = unknown> {
   printer: string;
+  template: TTemplate;
+  data: TData;
+}
+
+export interface CategoryPrintPayload<TTemplate extends PrintTemplate = PrintTemplate, TData = unknown> {
+  categoryId: string;
+  template: TTemplate;
+  data: TData;
+}
+
+export interface ItemCategoryPrintPayload<TTemplate extends PrintTemplate = PrintTemplate, TData = unknown> {
   template: TTemplate;
   data: TData;
 }
@@ -218,9 +239,11 @@ export interface InvoicePrintPayload {
 
 export type PrintPayload<TTemplate extends PrintTemplate = PrintTemplate, TData = unknown> =
   | TemplatePrintPayload<TTemplate, TData>
+  | CategoryPrintPayload<TTemplate, TData>
+  | ItemCategoryPrintPayload<TTemplate, TData>
   | InvoicePrintPayload;
 
-export type PrintJobStatus = 'waiting' | 'printing' | 'completed' | 'failed';
+export type PrintJobStatus = 'waiting' | 'printing' | 'spooled' | 'completed' | 'failed';
 
 export interface PrintJob {
   id: number;
@@ -228,6 +251,7 @@ export interface PrintJob {
   printer: string;
   printerName: string;
   template: string;
+  categoryId?: string;
   attempts: number;
   maxAttempts: number;
   createdAt: string;
@@ -235,6 +259,7 @@ export interface PrintJob {
   startedAt?: string;
   completedAt?: string;
   lastError?: string;
+  spoolerJobId?: number;
 }
 
 export interface FailedPrintJob extends PrintJob {
@@ -243,11 +268,9 @@ export interface FailedPrintJob extends PrintJob {
   payload?: unknown;
 }
 
-export interface PrintResponse {
-  success: true;
-  message: string;
-  job: PrintJob;
-}
+export type PrintResponse =
+  | { success: true; message: string; job: PrintJob }
+  | { success: true; message: string; jobs: PrintJob[] };
 
 export interface TestPrintResponse {
   success: true;

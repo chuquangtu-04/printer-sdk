@@ -1,11 +1,11 @@
 {
-  "name": "test-nemoprint-printer-sdk",
+  "name": "test-tpcoms-printer-sdk",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "test:sdk": "node test.js"
   },
   "dependencies": {
-    "@nemoprint/printer-sdk": "^1.0.0"
+    "@tpcoms/printer-sdk": "^1.0.0"
   }
 }

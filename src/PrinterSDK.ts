@@ -18,6 +18,7 @@ import {
   RetryQueuePayload,
   SaveLanPrinterPayload,
   TestLanPrinterPayload,
+  UpdatePrinterCategoriesPayload,
   TestPrintResponse,
   PrintJob,
 } from './types';
@@ -71,6 +72,16 @@ export class PrinterSDK {
     });
   }
 
+  updatePrinterCategories(
+    id: string,
+    payload: UpdatePrinterCategoriesPayload | string[]
+  ): Promise<LanPrinterActionResponse> {
+    return this.request<LanPrinterActionResponse>(`/api/printers/${encodeURIComponent(id)}/categories`, {
+      method: 'PATCH',
+      body: Array.isArray(payload) ? { categoryIds: payload } : payload,
+    });
+  }
+
   renameLanPrinter(id: string, payload: RenameLanPrinterPayload | string): Promise<LanPrinterActionResponse> {
     return this.request<LanPrinterActionResponse>(`/api/printers/lan/${encodeURIComponent(id)}`, {
       method: 'PATCH',
@@ -108,6 +119,14 @@ export class PrinterSDK {
 
   printKitchen(printer: string, data: KitchenData): Promise<PrintResponse> {
     return this.print({ printer, template: 'kitchen', data });
+  }
+
+  printKitchenByCategory(categoryId: string, data: KitchenData): Promise<PrintResponse> {
+    return this.print({ categoryId, template: 'kitchen', data });
+  }
+
+  printKitchenByItemCategories(data: KitchenData): Promise<PrintResponse> {
+    return this.print({ template: 'kitchen', data });
   }
 
   printBill(printer: string, data: BillData): Promise<PrintResponse> {
